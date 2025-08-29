@@ -1,0 +1,80 @@
+.app {
+  padding: 20px;
+  background: #111;
+  color: #fff;
+  font-family: Arial, sans-serif;
+}
+
+.genre-section {
+  margin-bottom: 40px;
+}
+
+.genre-title {
+  font-size: 20px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.carousel {
+  position: relative;
+  display: flex;
+  align-items: center;
+  overflow-x: hidden;
+  max-width: calc(100dvw - 3.5rem);
+}
+
+.carousel-track::-webkit-scrollbar {
+  display: none; /* hide scrollbar */
+}
+
+.movie-card {
+  min-width: 150px;
+  flex: 0 0 auto;
+  cursor: pointer;
+  transition: transform 0.2s;
+  scroll-snap-align: end;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.movie-card:hover {
+  transform: scale(1.05);
+}
+
+.movie-card img {
+  width: 100%;
+  height: 100%;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.6);
+}
+
+.arrow {
+  background: rgba(0, 0, 0, 0.6);
+  border: none;
+  color: white;
+  font-size: 20px;
+  cursor: pointer;
+  padding: 10px;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 1;
+}
+
+.arrow.left {
+  left: 0;
+}
+
+.arrow.right {
+  right: 0;
+}
+
+.carousel-track {
+  display: flex;
+  gap: 1.5rem;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory; /* enable scroll snap */
+  scroll-behavior: smooth; /* smooth scrolling for arrows too */
+  -webkit-overflow-scrolling: touch;
+}
