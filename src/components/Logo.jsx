@@ -1,11 +1,14 @@
+import { Link } from "react-router-dom";
 function Logo() {
   return (
-    <header>
-      <div className="logo">
-        <span role="img">🍿</span>
+    <div className="logo">
+      <Link to="/" className="logo-link">
+        <span role="img" aria-label="popcorn">
+          🍿
+        </span>
         <h1>Reelify</h1>
-      </div>
-    </header>
+      </Link>
+    </div>
   );
 }
 

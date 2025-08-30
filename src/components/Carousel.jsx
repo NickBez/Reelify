@@ -1,4 +1,4 @@
-import { useRef } from "react";
+import React, { useRef } from "react";
 import Card from "./Card";
 
 function Carousel({ movies, title }) {
@@ -6,7 +6,7 @@ function Carousel({ movies, title }) {
 
   const scroll = (direction) => {
     if (trackRef.current) {
-      const cardWidth = trackRef.current.firstChild.offsetWidth + 12; // card width + gap
+      const cardWidth = trackRef.current.firstChild.offsetWidth + 12;
       trackRef.current.scrollBy({
         left: direction === "left" ? -cardWidth : cardWidth,
         behavior: "smooth",
@@ -17,26 +17,40 @@ function Carousel({ movies, title }) {
   const showArrows = movies.length > 5;
 
   return (
-    <div className="genre-section">
-      {title && <h2 className="genre-title">{title}</h2>}
+    <section className="genre-section">
+      {title && (
+        <h2 className="genre-title" role="heading" aria-level="2">
+          {title}
+        </h2>
+      )}
       <div className="carousel">
         {showArrows && (
-          <button className="arrow left" onClick={() => scroll("left")}>
+          <button
+            className="arrow left"
+            onClick={() => scroll("left")}
+            aria-label={`Scroll left through ${title} movies`}
+          >
             ‹
           </button>
         )}
         <div className="carousel-track" ref={trackRef}>
           {movies.map((movie) => (
-            <Card key={movie.id} movie={movie} />
+            <article key={movie.id} className="movie-card">
+              <Card movie={movie} />
+            </article>
           ))}
         </div>
         {showArrows && (
-          <button className="arrow right" onClick={() => scroll("right")}>
+          <button
+            className="arrow right"
+            onClick={() => scroll("right")}
+            aria-label={`Scroll right through ${title} movies`}
+          >
             ›
           </button>
         )}
       </div>
-    </div>
+    </section>
   );
 }
 

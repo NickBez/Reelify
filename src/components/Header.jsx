@@ -1,9 +1,9 @@
-import Logo from "./Logo";
 import Search from "./Search";
+import Logo from "./Logo";
 
 function Header({ query, setQuery }) {
   return (
-    <header>
+    <header className="header">
       <Logo />
       <Search query={query} setQuery={setQuery} />
     </header>

@@ -1,11 +1,11 @@
+import { Link } from "react-router-dom";
 import "../carousel.css";
 
 function Card({ movie }) {
   return (
-    <div className="movie-card">
+    <Link to={`/movie/${movie.id}`} className="movie-card">
       <img src={movie.poster} alt={movie.title} />
-      <p>{movie.title}</p>
-    </div>
+    </Link>
   );
 }
 

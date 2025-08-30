@@ -1,16 +1,20 @@
 .app {
-  padding: 20px;
+  padding: 1.25rem;
   background: #111;
   color: #fff;
   font-family: Arial, sans-serif;
 }
 
 .genre-section {
-  margin-bottom: 40px;
+  padding: 1.5rem;
+}
+
+.genre-section:not(:has(.genre-title)) {
+  margin-top: 2.875rem;
 }
 
 .genre-title {
-  font-size: 20px;
+  font-size: 1.25rem;
   font-weight: bold;
   margin-bottom: 10px;
 }
@@ -20,11 +24,11 @@
   display: flex;
   align-items: center;
   overflow-x: hidden;
-  max-width: calc(100dvw - 3.5rem);
+  max-width: calc(100dvw - 4.25rem);
 }
 
 .carousel-track::-webkit-scrollbar {
-  display: none; /* hide scrollbar */
+  display: none;
 }
 
 .movie-card {
@@ -33,19 +37,16 @@
   cursor: pointer;
   transition: transform 0.2s;
   scroll-snap-align: end;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
 }
 
 .movie-card:hover {
-  transform: scale(1.05);
+  transform: scale(1.02);
 }
 
 .movie-card img {
   width: 100%;
   height: 100%;
-  border-radius: 8px;
+  border-radius: 0.5rem;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.6);
 }
 
@@ -53,7 +54,7 @@
   background: rgba(0, 0, 0, 0.6);
   border: none;
   color: white;
-  font-size: 20px;
+  font-size: 1.25rem;
   cursor: pointer;
   padding: 10px;
   position: absolute;
@@ -74,7 +75,8 @@
   display: flex;
   gap: 1.5rem;
   overflow-x: auto;
-  scroll-snap-type: x mandatory; /* enable scroll snap */
-  scroll-behavior: smooth; /* smooth scrolling for arrows too */
+  overflow-y: hidden;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
   -webkit-overflow-scrolling: touch;
 }
