@@ -1,50 +1,107 @@
+// MoviesByGenre.jsx
 import { useEffect, useState } from "react";
-import Carousel from "./Carousel";
+import Carousel from "./Carousel"; // Import the Carousel component
+import Card from "./Card"; // Import Card component for individual movies
 
-function MoviesByGenre({ query }) {
+function MoviesByGenre({ query, bookmarkedMovies, toggleBookmark }) {
   const [movies, setMovies] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
 
   useEffect(() => {
     async function fetchMovies() {
       try {
-        const res = await fetch("https://wookie.codesubmit.io/movies", {
+        setLoading(true);
+        setError("");
+
+        const url =
+          query.length > 0
+            ? `https://wookie.codesubmit.io/movies?q=${query}`
+            : "https://wookie.codesubmit.io/movies";
+
+        const res = await fetch(url, {
           headers: { Authorization: "Bearer Wookie2021" },
         });
+
+        if (!res.ok) throw new Error("Failed to fetch movies");
+
         const data = await res.json();
         setMovies(data.movies);
       } catch (err) {
-        console.error(err);
+        setError(err.message);
       } finally {
         setLoading(false);
       }
     }
+
     fetchMovies();
-  }, []);
+  }, [query]);
 
-  if (loading) return <p>Loading...</p>;
+  if (loading) return <p className="loading">Loading Movies...</p>;
+  if (error) return <p>{error}</p>;
 
-  // Search results
+  // Display bookmarked movies at the top if there are any
+  const hasBookmarkedMovies = bookmarkedMovies.length > 0;
+
+  // If there is a query, show the search results
   if (query.length >= 3) {
-    const filtered = movies.filter((m) =>
-      m.title.toLowerCase().includes(query.toLowerCase())
+    if (movies.length === 0) return <p>No movies found for "{query}"</p>;
+
+    return (
+      <div>
+        {hasBookmarkedMovies && (
+          <section className="carousel-container">
+            <h2>Bookmarked Movies</h2>
+            <Carousel
+              movies={bookmarkedMovies}
+              title="Bookmarked Movies"
+              bookmarkedMovies={bookmarkedMovies}
+              toggleBookmark={toggleBookmark}
+            />
+          </section>
+        )}
+        <div className="movie-cards-container">
+          {movies.map((movie) => (
+            <Card
+              key={movie.id}
+              movie={movie}
+              bookmarkedMovies={bookmarkedMovies}
+              toggleBookmark={toggleBookmark}
+            />
+          ))}
+        </div>
+      </div>
     );
-
-    if (filtered.length === 0) return <p>No movies found for "{query}"</p>;
-
-    return <Carousel movies={filtered} />;
   }
 
-  // Otherwise, show genre carousels
+  // Otherwise, group movies by genre and display carousels
   const genres = [...new Set(movies.flatMap((m) => m.genres))];
 
   return (
-    <>
+    <section className="main">
+      {hasBookmarkedMovies && (
+        <section className="carousel-container">
+          <Carousel
+            movies={bookmarkedMovies}
+            title="Bookmarked Movies"
+            bookmarkedMovies={bookmarkedMovies}
+            toggleBookmark={toggleBookmark}
+          />
+        </section>
+      )}
       {genres.map((genre) => {
         const genreMovies = movies.filter((m) => m.genres.includes(genre));
-        return <Carousel key={genre} movies={genreMovies} title={genre} />;
+        return (
+          <Carousel
+            key={genre}
+            movies={genreMovies}
+            title={genre}
+            bookmarkedMovies={bookmarkedMovies}
+            toggleBookmark={toggleBookmark}
+          />
+        );
       })}
-    </>
+    </section>
   );
 }
 

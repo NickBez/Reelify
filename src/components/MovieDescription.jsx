@@ -1,8 +1,9 @@
+// MovieDescription.jsx
 import { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useParams } from "react-router-dom"; // useParams to access URL params
 
-function MovieDescription({ query }) {
-  const { movieId } = useParams();
+function MovieDescription({ bookmarkedMovies, toggleBookmark }) {
+  const { movieId } = useParams(); // Get the movieId from the URL
   const [movie, setMovie] = useState(null);
 
   useEffect(() => {
@@ -10,9 +11,7 @@ function MovieDescription({ query }) {
       try {
         const res = await fetch(
           `https://wookie.codesubmit.io/movies/${movieId}`,
-          {
-            headers: { Authorization: "Bearer Wookie2021" },
-          }
+          { headers: { Authorization: "Bearer Wookie2021" } }
         );
         const data = await res.json();
         setMovie(data);
@@ -25,6 +24,9 @@ function MovieDescription({ query }) {
   }, [movieId]);
 
   if (!movie) return <p>Loading...</p>;
+
+  // Check if the movie is bookmarked
+  const isBookmarked = bookmarkedMovies.some((m) => m.id === movie.id);
 
   return (
     <div className="movie-description">
@@ -45,8 +47,10 @@ function MovieDescription({ query }) {
         <h3>Movie Description:</h3>
         <p>{movie.overview}</p>
 
-        {/* If there's a search query, display it */}
-        {query && <h3>Search Results for: {query}</h3>}
+        {/* Bookmark toggle button */}
+        <button onClick={() => toggleBookmark(movie)}>
+          {isBookmarked ? "Remove from Bookmarks" : "Add to Bookmarks"}
+        </button>
       </div>
     </div>
   );
