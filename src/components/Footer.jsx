@@ -1,8 +1,12 @@
 function Footer() {
+  const year = new Date().getFullYear();
+
   return (
-    <footer className="footer">
+    <footer className="footer" aria-label="Website footer">
       <p className="copyright">
-        &copy;2025 Reelify. Bringing movies to life. All rights reserved.
+        <small>
+          &copy; {year} Reelify. Bringing movies to life. All rights reserved.
+        </small>
       </p>
     </footer>
   );

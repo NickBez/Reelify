@@ -42,13 +42,6 @@ body {
   font-weight: bold;
 }
 
-.logo-link h1 {
-  font-size: 1.8rem;
-  line-height: 1.1;
-  margin: 1.5rem 0 1rem;
-  color: var(--color-text);
-}
-
 button {
   border-radius: 0.5rem;
   border: 1px solid transparent;
@@ -125,21 +118,35 @@ button:focus-visible {
   font-size: 2.2rem;
 }
 
+.logo {
+  margin: 0;
+}
+
 .logo-link {
   display: flex;
   align-items: center;
+  font-size: 1.8rem;
+  line-height: 1.1;
+}
+
+.logo-link,
+.logo-link:hover {
+  color: var(--color-text);
 }
 
 .header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
   padding: 1.5rem 1.5rem 1.5rem 1rem;
   border-bottom: 1px solid var(--color-primary-light);
   background-color: var(--color-primary);
   position: sticky;
   top: 0;
   z-index: 2;
+}
+
+main.main-content {
+  max-width: 1920px;
+  margin: 0 auto;
+  padding: 2rem 1.75rem 3rem;
 }
 
 /* MovieDescription.css */
@@ -196,6 +203,14 @@ button:focus-visible {
   margin-bottom: 0.625rem;
 }
 
+section.header-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  max-width: 1920px;
+  margin: 0 auto;
+}
+
 /* Dark Mode - Default */
 @media (prefers-color-scheme: dark) {
   :root {
@@ -244,4 +259,9 @@ button:focus-visible {
 
 [data-theme="light"] button {
   background-color: var(--color-button-light);
+}
+
+[data-theme="light"] .arrow.right,
+[data-theme="light"] .arrow.left {
+  color: var(--color-text-light);
 }

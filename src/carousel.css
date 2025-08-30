@@ -7,6 +7,8 @@
 
 .genre-section {
   padding: 1.5rem;
+  max-width: 120rem;
+  margin: 0 auto;
 }
 
 .genre-section:not(:has(.genre-title)) {

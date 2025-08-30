@@ -5,16 +5,21 @@ function Carousel({ movies, title }) {
   const trackRef = useRef(null);
 
   const scroll = (direction) => {
-    if (trackRef.current) {
-      const cardWidth = trackRef.current.firstChild.offsetWidth + 12;
-      trackRef.current.scrollBy({
-        left: direction === "left" ? -cardWidth : cardWidth,
-        behavior: "smooth",
-      });
-    }
+    const el = trackRef.current;
+    if (!el) return;
+
+    const first = el.firstElementChild;
+    const step = first?.getBoundingClientRect?.().width
+      ? first.getBoundingClientRect().width + 12 // card width + gap
+      : el.clientWidth * 0.9; // fallback
+
+    el.scrollBy({
+      left: direction === "left" ? -step : step,
+      behavior: "smooth",
+    });
   };
 
-  const showArrows = movies.length > 5;
+  const showArrows = Array.isArray(movies) && movies.length > 5;
 
   return (
     <section className="genre-section">
@@ -23,16 +28,19 @@ function Carousel({ movies, title }) {
           {title}
         </h2>
       )}
+
       <div className="carousel">
         {showArrows && (
           <button
+            type="button"
             className="arrow left"
             onClick={() => scroll("left")}
-            aria-label={`Scroll left through ${title} movies`}
+            aria-label={`Scroll left through ${title ?? "movies"}`}
           >
             ‹
           </button>
         )}
+
         <div className="carousel-track" ref={trackRef}>
           {movies.map((movie) => (
             <article key={movie.id} className="movie-card">
@@ -40,11 +48,13 @@ function Carousel({ movies, title }) {
             </article>
           ))}
         </div>
+
         {showArrows && (
           <button
+            type="button"
             className="arrow right"
             onClick={() => scroll("right")}
-            aria-label={`Scroll right through ${title} movies`}
+            aria-label={`Scroll right through ${title ?? "movies"}`}
           >
             ›
           </button>

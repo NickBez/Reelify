@@ -1,22 +1,37 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
 function ThemeToggle() {
-  // Get the current theme from localStorage or default to dark mode
-  const [theme, setTheme] = useState(localStorage.getItem("theme") || "dark");
+  // Initialize theme safely (guard against SSR / unavailable localStorage)
+  const [theme, setTheme] = useState(() => {
+    try {
+      return localStorage.getItem("theme") || "dark";
+    } catch {
+      return "dark";
+    }
+  });
 
   useEffect(() => {
-    // Apply the current theme to the body
+    // Apply theme to <body>
     document.body.setAttribute("data-theme", theme);
-    localStorage.setItem("theme", theme); // Save the theme to localStorage
+
+    try {
+      localStorage.setItem("theme", theme);
+    } catch {
+      // Fallback if storage is blocked (e.g. incognito/private mode)
+      console.warn("Could not persist theme to localStorage");
+    }
   }, [theme]);
 
-  const toggleTheme = () => {
-    setTheme((prevTheme) => (prevTheme === "dark" ? "light" : "dark"));
-  };
+  const toggleTheme = () =>
+    setTheme((prev) => (prev === "dark" ? "light" : "dark"));
 
   return (
-    <button onClick={toggleTheme} aria-label="Toggle dark/light mode">
-      {theme === "dark" ? "Switch to Light Mode" : "Switch to Dark Mode"}
+    <button
+      type="button"
+      onClick={toggleTheme}
+      aria-label={`Switch to ${theme === "dark" ? "light" : "dark"} mode`}
+    >
+      {theme === "dark" ? "☀️ Switch to Light Mode" : "🌙 Switch to Dark Mode"}
     </button>
   );
 }

@@ -1,12 +1,33 @@
+import { memo } from "react";
+import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
 import "../carousel.css";
 
-function Card({ movie }) {
+function Card({ movie, className = "movie-card" }) {
   return (
-    <Link to={`/movie/${movie.id}`} className="movie-card">
-      <img src={movie.poster} alt={movie.title} />
+    <Link
+      to={`/movie/${movie.id}`}
+      className={className}
+      aria-label={`View details for ${movie.title}`}
+      title={movie.title}
+    >
+      <img
+        src={movie.poster}
+        alt={`${movie.title} poster`}
+        loading="lazy"
+        decoding="async"
+      />
     </Link>
   );
 }
 
-export default Card;
+Card.propTypes = {
+  movie: PropTypes.shape({
+    id: PropTypes.string.isRequired,
+    title: PropTypes.string.isRequired,
+    poster: PropTypes.string.isRequired,
+  }).isRequired,
+  className: PropTypes.string,
+};
+
+export default memo(Card);

@@ -1,14 +1,15 @@
-import React from "react";
 import Search from "./Search";
 import Logo from "./Logo";
-import ThemeToggle from "./ThemeToggle"; // Import the ThemeToggle component
+import ThemeToggle from "./ThemeToggle";
 
 function Header({ query, setQuery }) {
   return (
-    <header className="header">
-      <Logo setQuery={setQuery} />
-      <Search query={query} setQuery={setQuery} />
-      <ThemeToggle /> {/* Add the theme toggle button */}
+    <header className="header" role="banner" aria-label="Site header">
+      <section className="header-content">
+        <Logo setQuery={setQuery} />
+        <Search query={query} setQuery={setQuery} />
+        <ThemeToggle aria-label="Toggle between light and dark mode" />
+      </section>
     </header>
   );
 }

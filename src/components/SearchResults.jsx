@@ -44,7 +44,7 @@ function SearchResults({ bookmarkedMovies, toggleBookmark }) {
     }
   }, [searchQuery]);
 
-  if (isLoading) return <p>Loading search results...</p>;
+  if (isLoading) return <p className="loading">Loading search results...</p>;
   if (error) return <p>{error}</p>;
 
   return (

@@ -1,5 +1,5 @@
 // App.jsx
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import Header from "./components/Header";
 import MoviesByGenre from "./components/MoviesByGenre";
@@ -7,63 +7,90 @@ import MovieDescription from "./components/MovieDescription";
 import SearchResults from "./components/SearchResults";
 import Footer from "./components/Footer";
 
-function App() {
-  const [query, setQuery] = useState(""); // Search query state
-  const [bookmarkedMovies, setBookmarkedMovies] = useState(
-    JSON.parse(localStorage.getItem("bookmarkedMovies")) || [] // Load bookmarks from localStorage
-  );
+// If you want route-based code splitting later, uncomment below and
+// replace the direct imports above:
+// import { lazy, Suspense } from "react";
+// const Header = lazy(() => import("./components/Header"));
+// const MoviesByGenre = lazy(() => import("./components/MoviesByGenre"));
+// const MovieDescription = lazy(() => import("./components/MovieDescription"));
+// const SearchResults = lazy(() => import("./components/SearchResults"));
+// const Footer = lazy(() => import("./components/Footer"));
 
-  // Update localStorage when the bookmarkedMovies state changes
+function App() {
+  const [query, setQuery] = useState("");
+
+  // Lazy + safe localStorage init (runs once)
+  const [bookmarkedMovies, setBookmarkedMovies] = useState(() => {
+    try {
+      const raw = localStorage.getItem("bookmarkedMovies");
+      return raw ? JSON.parse(raw) : [];
+    } catch {
+      return [];
+    }
+  });
+
+  // Persist bookmarks
   useEffect(() => {
-    localStorage.setItem("bookmarkedMovies", JSON.stringify(bookmarkedMovies));
+    try {
+      localStorage.setItem(
+        "bookmarkedMovies",
+        JSON.stringify(bookmarkedMovies)
+      );
+    } catch {
+      // ignore storage failures (private mode, etc.)
+    }
   }, [bookmarkedMovies]);
 
-  // Function to toggle bookmark status for a movie
-  const toggleBookmark = (movie) => {
-    setBookmarkedMovies((prevBookmarks) => {
-      if (prevBookmarks.some((m) => m.id === movie.id)) {
-        return prevBookmarks.filter((m) => m.id !== movie.id); // Remove bookmark
-      } else {
-        return [...prevBookmarks, movie]; // Add bookmark
-      }
+  // Memoized toggle to avoid re-renders downstream
+  const toggleBookmark = useCallback((movie) => {
+    setBookmarkedMovies((prev) => {
+      const exists = prev.some((m) => m.id === movie.id);
+      return exists ? prev.filter((m) => m.id !== movie.id) : [...prev, movie];
     });
-  };
+  }, []);
 
   return (
     <Router>
+      {/* <Suspense fallback={<div className="loading">Loading…</div>}> */}
       <Header query={query} setQuery={setQuery} />
-      <Routes>
-        <Route
-          path="/"
-          element={
-            <MoviesByGenre
-              query={query}
-              bookmarkedMovies={bookmarkedMovies}
-              toggleBookmark={toggleBookmark}
-            />
-          }
-        />
-        <Route
-          path="/movie/:movieId"
-          element={
-            <MovieDescription
-              bookmarkedMovies={bookmarkedMovies}
-              toggleBookmark={toggleBookmark}
-            />
-          }
-        />
-        <Route
-          path="/search"
-          element={
-            <SearchResults
-              query={query}
-              bookmarkedMovies={bookmarkedMovies}
-              toggleBookmark={toggleBookmark}
-            />
-          }
-        />
-      </Routes>
+
+      <main className="main-content" role="main">
+        <Routes>
+          <Route
+            path="/"
+            element={
+              <MoviesByGenre
+                query={query}
+                bookmarkedMovies={bookmarkedMovies}
+                toggleBookmark={toggleBookmark}
+              />
+            }
+          />
+          <Route
+            path="/movie/:movieId"
+            element={
+              <MovieDescription
+                bookmarkedMovies={bookmarkedMovies}
+                toggleBookmark={toggleBookmark}
+              />
+            }
+          />
+          <Route
+            path="/search"
+            element={
+              <SearchResults
+                // SearchResults reads the query from the URL;
+                // these props are kept only if you plan to use them later
+                bookmarkedMovies={bookmarkedMovies}
+                toggleBookmark={toggleBookmark}
+              />
+            }
+          />
+        </Routes>
+      </main>
+
       <Footer />
+      {/* </Suspense> */}
     </Router>
   );
 }
