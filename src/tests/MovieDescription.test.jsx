@@ -39,7 +39,6 @@ test("renders movie details", async () => {
     </MemoryRouter>
   );
 
-  // findBy* waits, no need for waitFor
   expect(await screen.findByText(/Inception/i)).toBeInTheDocument();
   expect(screen.getByText(/Christopher Nolan/i)).toBeInTheDocument();
 });

@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 
 function Logo({ setQuery }) {
   const handleLogoClick = () => {
-    setQuery(""); // Clear the search input
+    setQuery("");
   };
 
   return (

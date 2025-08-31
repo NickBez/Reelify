@@ -4,9 +4,7 @@ function Footer() {
   return (
     <footer className="footer" aria-label="Website footer">
       <p className="copyright">
-        <small>
-          &copy; {year} Reelify. Bringing movies to life. All rights reserved.
-        </small>
+        &copy; {year} Reelify. Bringing movies to life. All rights reserved.
       </p>
     </footer>
   );

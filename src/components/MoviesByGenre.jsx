@@ -1,7 +1,6 @@
-// MoviesByGenre.jsx
 import { useEffect, useState } from "react";
-import Carousel from "./Carousel"; // Import the Carousel component
-import Card from "./Card"; // Import Card component for individual movies
+import Carousel from "./Carousel";
+import Card from "./Card";
 
 function MoviesByGenre({ query, bookmarkedMovies, toggleBookmark }) {
   const [movies, setMovies] = useState([]);
@@ -39,11 +38,8 @@ function MoviesByGenre({ query, bookmarkedMovies, toggleBookmark }) {
 
   if (loading) return <p className="loading">Loading Movies...</p>;
   if (error) return <p>{error}</p>;
-
-  // Display bookmarked movies at the top if there are any
   const hasBookmarkedMovies = bookmarkedMovies.length > 0;
 
-  // If there is a query, show the search results
   if (query.length >= 3) {
     if (movies.length === 0) return <p>No movies found for "{query}"</p>;
 
@@ -74,7 +70,6 @@ function MoviesByGenre({ query, bookmarkedMovies, toggleBookmark }) {
     );
   }
 
-  // Otherwise, group movies by genre and display carousels
   const genres = [...new Set(movies.flatMap((m) => m.genres))];
 
   return (

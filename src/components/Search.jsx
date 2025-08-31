@@ -1,16 +1,11 @@
-// Search.jsx
-import React from "react";
-import { useNavigate } from "react-router-dom"; // Import useNavigate
+import { useNavigate } from "react-router-dom";
 
 function Search({ query, setQuery }) {
-  const navigate = useNavigate(); // To programmatically navigate
-
-  // Handle search input
+  const navigate = useNavigate();
   const handleSearch = (e) => {
     const query = e.target.value;
-    setQuery(query); // Update the query state
+    setQuery(query);
     if (query) {
-      // Navigate to the /search page with the query parameter
       navigate(`/search?q=${query}`);
     }
   };
@@ -21,7 +16,7 @@ function Search({ query, setQuery }) {
       type="text"
       placeholder="Search movies..."
       value={query}
-      onChange={handleSearch} // Trigger search and navigation
+      onChange={handleSearch}
     />
   );
 }

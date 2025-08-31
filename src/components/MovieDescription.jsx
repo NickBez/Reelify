@@ -28,8 +28,6 @@ function MovieDescription({
 
         if (!res.ok) throw new Error(`Failed to fetch movie (${res.status})`);
         const data = await res.json();
-
-        // Some APIs wrap detail as object or { movie: {...} }. Handle both.
         const m = data?.movie ?? data;
         setMovie(m);
       } catch (err) {
@@ -45,18 +43,15 @@ function MovieDescription({
   if (error) return <p className="error">{error}</p>;
   if (!movie) return <p className="loading">Loading Movie...</p>;
 
-  // ---- Presentational helpers ----
   const year = movie.released_on
     ? new Date(movie.released_on).getFullYear()
     : "";
   const length = movie.length || "";
   const castList = Array.isArray(movie.cast) ? movie.cast.join(", ") : "";
 
-  // Normalize directors: "A,B" -> "A, B"; if already spaced, keep as is
   const directorText = (() => {
     const d = movie.director || "";
     if (!d) return "";
-    // If it contains commas without following space, normalize, else keep.
     return d.includes(",")
       ? d
           .split(",")
@@ -82,7 +77,7 @@ function MovieDescription({
         <h2>
           {movie.title}{" "}
           {typeof movie.imdb_rating === "number"
-            ? `(${movie.imdb_rating} / 10)`
+            ? `(${movie.imdb_rating})`
             : ""}
         </h2>
 

@@ -1,17 +1,14 @@
-// SearchResults.jsx
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
-import Card from "./Card"; // Import Card component to display movie details
+import Card from "./Card";
 
 function SearchResults({ bookmarkedMovies, toggleBookmark }) {
   const [movies, setMovies] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState("");
-
-  // Access the query parameter from the URL
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
-  const searchQuery = queryParams.get("q"); // Get the value of 'q' from the URL
+  const searchQuery = queryParams.get("q");
 
   useEffect(() => {
     if (searchQuery) {
@@ -26,12 +23,10 @@ function SearchResults({ bookmarkedMovies, toggleBookmark }) {
             }
           );
           const data = await res.json();
-
-          // Ensure the response contains the 'movies' key
           if (data.movies && Array.isArray(data.movies)) {
-            setMovies(data.movies); // Set movies to the 'movies' key in the response
+            setMovies(data.movies);
           } else {
-            setMovies([]); // If no valid movies found, set an empty array
+            setMovies([]);
             setError("No valid movies found.");
           }
         } catch (err) {

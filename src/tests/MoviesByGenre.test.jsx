@@ -37,7 +37,6 @@ test("shows movies grouped by genre", async () => {
     </MemoryRouter>
   );
 
-  // Use findByRole on images (titles aren’t rendered as text in Card)
   expect(
     await screen.findByRole("img", { name: /inception/i })
   ).toBeInTheDocument();

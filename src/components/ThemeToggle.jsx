@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 
 function ThemeToggle() {
-  // Initialize theme safely (guard against SSR / unavailable localStorage)
   const [theme, setTheme] = useState(() => {
     try {
       return localStorage.getItem("theme") || "dark";
@@ -11,13 +10,11 @@ function ThemeToggle() {
   });
 
   useEffect(() => {
-    // Apply theme to <body>
-    document.body.setAttribute("data-theme", theme);
+    document.documentElement.setAttribute("data-theme", theme);
 
     try {
       localStorage.setItem("theme", theme);
     } catch {
-      // Fallback if storage is blocked (e.g. incognito/private mode)
       console.warn("Could not persist theme to localStorage");
     }
   }, [theme]);
@@ -28,10 +25,11 @@ function ThemeToggle() {
   return (
     <button
       type="button"
+      className={`theme-toggle ${theme}`}
       onClick={toggleTheme}
       aria-label={`Switch to ${theme === "dark" ? "light" : "dark"} mode`}
     >
-      {theme === "dark" ? "☀️ Switch to Light Mode" : "🌙 Switch to Dark Mode"}
+      <span className="emoji">{theme === "dark" ? "☀️" : "🌙"}</span>
     </button>
   );
 }

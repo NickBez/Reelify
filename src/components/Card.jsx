@@ -1,7 +1,6 @@
 import { memo } from "react";
 import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
-import "../carousel.css";
 
 function Card({ movie, className = "movie-card" }) {
   return (
